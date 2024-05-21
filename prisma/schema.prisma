@@ -1,0 +1,17 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// schema.prisma
+datasource db {
+  // MySQL 데이터베이스 엔진을 사용합니다.
+  provider = "mysql"
+  // 데이터베이스 연결 정보를 .env 파일의 DATABASE_URL 로부터 읽어옵니다.
+  url      = env("DATABASE_URL")
+}
