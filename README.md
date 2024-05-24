@@ -30,3 +30,4 @@ ERD (네트워크 끊김 현상 때문에 일단 vscode로 작성(삭제예정) 
 - **[ERD](https://drawsql.app/teams/-1294/diagrams/employment)**
 
 ## **DB**
+- MYSQL DB : employment
