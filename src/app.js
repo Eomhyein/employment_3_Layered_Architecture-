@@ -2,11 +2,13 @@
 import express from 'express';
 import { errorHandler } from './middlewares/error-handler.middleware.js'; 
 import { connectDb } from './utils/prisma.util.js'; // connectDb 연결
+import AuthRouter from './routers/auth.router.js'; // 회원가입 라우터 연결
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json()); 
+app.use('/auth', [AuthRouter]); // 회원가입 라우터 연결
 
 // 라우터 예시
 // 예: app.use('/api/resumes', resumesRouter);

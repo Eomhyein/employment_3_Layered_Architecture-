@@ -28,3 +28,4 @@
 
 ## **DB**
 - MYSQL DB : employment
+- .env 파일 : DATABASE_URL 저장
