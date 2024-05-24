@@ -1,9 +1,6 @@
 2024.05.21_test
 [폴더 구조 생성]</br>
 .env.example // Git에 올라감, .env의 복사본으로 Key만 있고 Value는 삭제할 것!</br>
-2024.05.23_api_ing
-API 명세서ing 완성본 아님</br>
-ERD (네트워크 끊김 현상 때문에 일단 vscode로 작성(삭제예정) DrawSQL, ERD Cloud로 완성본 대체 예정 )</br>
 
 # 🤝나만의 채용 서비스 백엔드 서버 만들기
 ## [기간]
