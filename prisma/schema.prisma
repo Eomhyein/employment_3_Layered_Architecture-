@@ -13,5 +13,77 @@ datasource db {
   // MySQL 데이터베이스 엔진을 사용합니다.
   provider = "mysql"
   // 데이터베이스 연결 정보를 .env 파일의 DATABASE_URL 로부터 읽어옵니다.
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
+}
+
+enum Status {
+  APPLY
+  DROP
+  PASS
+  INTERVIEW1
+  INTERVIEW2
+  FINAL_PASS
+}
+
+enum Role {
+  APPLICANT
+  RECRUITER
+}
+
+model Users {
+  id          Int          @id @default(autoincrement()) @map("id")
+  email       String       @unique @map("email")
+  password    String       @map("password")
+  name        String       @map("name")
+  role        Role         @default(APPLICANT) @map("role")
+  created_at  DateTime     @default(now()) @map("created_at")
+  updated_at  DateTime     @updatedAt @map("updated_at")
+
+  token       Token?       // 사용자(users) 테이블과 토큰(token) 테이블은 1:1관계이다
+  resume      Resume[]     // 사용자(users) 테이블과 이력서(resume) 테이블이 1:N관계이다.
+  resume_logs ResumeLogs[] // 사용자(users) 테이블과 이력서 상태 변경 (resume_logs)테이블이 1:N관계이다.
+
+  @@map("Users")
+}
+
+model Resume {
+  id          Int          @id @default(autoincrement()) @map("id")
+  user_id     Int          @map("user_id") // 사용자(users) 테이블을 참조하는 외래키
+  title       String       @map("title")
+  about_me    String       @map("about_me") @db.Text
+  status      Status       @default(APPLY) @map("status")
+  created_at  DateTime     @default(now()) @map("created_at")
+  updated_at  DateTime     @updatedAt @map("updated_at")
+
+  resume_logs ResumeLogs[]  // 이력서(resume) 테이블과 이력서 상태 변경 (resume_logs)테이블이 1:N관계이다.
+  user        Users        @relation(fields: [user_id], references: [id]) // 사용자(users) 테이블과 관계를 설정합니다.
+
+  @@map("Resume")
+}
+
+model ResumeLogs {
+  id           Int      @id @default(autoincrement()) @map("id")
+  recruiter_id Int      @map("recruiter_id") // 사용자(users) 테이블을 참조하는 외래키
+  resume_id    Int      @map("resume_id") // 이력서(resume) 테이블을 참조하는 외래키
+  old_status   Status   @map("old_status")
+  new_status   Status   @map("new_status")
+  reason       String   @map("reason")
+  created_at   DateTime @default(now()) @map("created_at")
+
+  recruiter    Users    @relation(fields: [recruiter_id], references: [id]) // 사용자(users) 테이블과 관계를 설정합니다
+  resume       Resume   @relation(fields: [resume_id], references: [id]) // 이력서(resume) 테이블과 관계를 설정합니다
+
+  @@map("ResumeLogs")
+}
+
+model Token {
+  id          Int       @id @default(autoincrement()) @map("id")
+  user_id     Int       @unique @map("user_id") // 사용자(users) 테이블을 참조하는 외래키
+  token       String    @map("token")
+  created_at  DateTime  @default(now()) @map("created_at")
+  updated_at  DateTime  @updatedAt @map("updated_at")
+
+  user        Users     @relation(fields: [user_id], references: [id]) // 사용자(users) 테이블과 관계를 설정합니다.
+
+  @@map("Token")
 }
