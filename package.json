@@ -5,11 +5,13 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev" :"nodemon src/app.js"
+    "dev": "nodemon src/app.js"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
+    "bcrypt": "^5.1.1",
     "express": "^4.19.2",
+    "joi": "^17.13.1",
     "prisma": "^5.14.0"
   },
   "devDependencies": {
