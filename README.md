@@ -27,4 +27,6 @@ ERD (네트워크 끊김 현상 때문에 일단 vscode로 작성(삭제예정) 
 - **[Notion](https://humorous-krill-a4e.notion.site/Node-js-API-c3dc5b534692415fb2c4bb75fa989d36?pvs=4)**
 
 ## **ERD**
-- ERD
+- **[ERD](https://drawsql.app/teams/-1294/diagrams/employment)**
+
+## **DB**
