@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt'; // 1-5 bcrypt 리팩토링
 
 const router = express.Router();
 // 1. 사용자 회원가입 API
-router.post('/sign-up', async (req, res, next) => {
+router.post('/auth/sign-up', async (req, res, next) => {
   try {
     // 1-1. 이메일, 비밀번호, 이름을  req.body로 전달받는다.
     const { email, password, passwordConfirm, name } = req.body;
