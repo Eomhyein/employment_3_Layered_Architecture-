@@ -23,12 +23,12 @@ router.post('/sign-up', async (req, res, next) => {
     if (!name) {
       return res.status(400).json({ message: '이름을 입력해주세요' });
     }
-    // 이메일 형식에 맞지 않는 경우 - “이메일 형식이 올바르지 않습니다.”
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    // 1-2. 이메일 형식에 맞지 않는 경우 - “이메일 형식이 올바르지 않습니다.”
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 정규표현식으로 이메일형태(아이디.@주소.com)를 생각하면됨
     if (!emailRegex.test(email)) {
         return res.status(400).json({ message: '이메일 형식이 올바르지 않습니다.' });
     }
-    // 1-2. 동일한 이메일을 가진 사용자가 있는지 확인합니다.
+    // 1-3. 동일한 이메일을 가진 사용자가 있는지 확인합니다.
     const isExistUser = await prisma.users.findFirst({
       where: {
         email: email,
@@ -38,7 +38,7 @@ router.post('/sign-up', async (req, res, next) => {
       return res.status(400).json({ message: '이미 가입 된 사용자입니다.' });
     }
 
-    // 1-6 비밀번호가 6자리 미만인 경우 - “비밀번호는 6자리 이상이어야 합니다.”
+    // 1-4 비밀번호가 6자리 미만인 경우 - “비밀번호는 6자리 이상이어야 합니다.”
     if (password.length < 6) {
       return res.status(400).json({
         success: false,

@@ -7,6 +7,13 @@ import bcrypt from 'bcrypt'; // bcrypt 리팩토링
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
+
+// 액세스 토큰 생성 함수
+// AccessToken(Payload에 사용자 ID를 포함하고 유효기간이 12시간)을 생성합니다.
+const generateAccessToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '12h' });
+};
+
 // 2. 로그인 API
 router.post('/sign-in', async (req, res, next) => {
   try {
@@ -20,12 +27,14 @@ router.post('/sign-in', async (req, res, next) => {
       return res.status(400).json({ message: '비밀번호을 입력해 주세요.' });
     }
 
-    const user = await prisma.users.findFirst({ where: { email } });
+    const user = await prisma.users.findFirst ({ 
+      where: { 
+        email 
+      } 
+    });
 
     if (!user) {
-      return res
-        .status(401)
-        .json({ message: '이메일 형식이 올바르지 않습니다.' });
+      return res.status(401).json({ message: '이메일 형식이 올바르지 않습니다.' });
     }
     // 2-2 입력받은 사용자의 비밀번호와 데이터베이스에 저장된 비밀번호를 비교합니다.
     const isPasswordValid = await bcrypt.compare(password, user.password);
