@@ -4,7 +4,7 @@ import { prisma } from '../utils/prisma/index.js'; // connectDb 연결
 
 export default async function (req, res, next) {
   try {
-    const { authorization } = req.hearers['authorization'];
+    const { authorization } = req.headers['authorization']; // Authorization Header사용
     if (!authorization) throw new Error('인증 정보가 없습니다.');
 
     const [tokenType, token] = authorization.split(' ');
