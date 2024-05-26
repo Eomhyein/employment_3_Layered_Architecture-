@@ -4,7 +4,7 @@ import { prisma } from '../utils/prisma/index.js'; // connectDb 연결
 
 export default async function (req, res, next) {
   try {
-    const { authorization } = req.cookies;
+    const { authorization } = req.hearers['authorization'];
     if (!authorization) throw new Error('인증 정보가 없습니다.');
 
     const [tokenType, token] = authorization.split(' ');
@@ -20,7 +20,7 @@ export default async function (req, res, next) {
     });
     if (!user) {
       res.clearCookie('authorization');
-      throw new Error('인증 정보가 일치하는 사용자가 없습니다.');
+      throw new Error('인증 정보와 일치하는 사용자가 없습니다.');
     }
 
     // req.user에 사용자 정보를 저장합니다.

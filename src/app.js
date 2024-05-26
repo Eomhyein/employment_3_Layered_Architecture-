@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser()); // 쿠키
 
-app.use('/', AuthRouter, UsersRouter); // 1. 회원가입, 로그인 라우터 연결
+app.use('/', AuthRouter, UsersRouter); // 1,2 회원가입, 로그인 라우터 연결
 
 app.use(errorHandler); // 에러 핸들링 미들웨어
 
