@@ -63,33 +63,4 @@ router.get('/auth/me', accessTokenMiddle, (req, res) => {
   });
 });
 
-// router.get('/auth/me', async (req, res, next) => {
-//   try {
-//     // 3-1. 내 정보를 보는 페이지 요청시-> 요청받은 access token을 헤더에서 보여준다.
-//     const authHeader = decodeURIComponent(req.headers["authorization"]);
-//     if (!authHeader) {
-//       return res.status(401).json({ message: '헤더 승인이 누락되었습니다.' });
-//     }
-//     // 3-2. req header에서 Authorization 토큰 값을 가져온다.
-//     const token = authHeader.split(' ')[1];
-//     try {
-//       // 3-3. 토큰을 확인한다.
-//       const decoded = jwt.verify(token, 'custom-secret-key'); // secret key
-//       // 1)true면 요청한 페이지를 보여준다
-//       const user = await prisma.users.findUnique({ where: { id: decoded.id } });
-//       // 2) false면 메시지를 보여준다.
-//       if (!user) {
-//         return res.status(404).json({ message: '유저를 찾을 수 없습니다.' });
-//       }
-//       return res.status(200).json({ user });
-
-//     } catch (error) {
-//       console.log(error);
-//       return res.status(401).json({ message: '잘못된 토큰입니다.' });
-//     }
-
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 export default router;
