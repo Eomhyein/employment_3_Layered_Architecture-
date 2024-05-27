@@ -49,8 +49,7 @@ router.post('/auth/login', async (req, res, next) => {
   }
 });
 
-// // 3. 내 정보 조회 API 
-// 내 정보 조회 API
+// // 3. 내 정보 조회 API (AccessToken 인증 필요)
 router.get('/auth/me', accessTokenMiddle, (req, res) => {
   const user = req.user;
   return res.status(200).json({
