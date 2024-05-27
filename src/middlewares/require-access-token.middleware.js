@@ -1,4 +1,4 @@
-// src/middlewares/auth.middleware.js
+// src/middlewares/require-access-token.middleware.js
 import jwt from 'jsonwebtoken';
 import { prisma } from '../utils/prisma/index.js'; // connectDb 연결
 
