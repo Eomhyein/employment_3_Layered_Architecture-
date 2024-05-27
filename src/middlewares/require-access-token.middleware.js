@@ -1,4 +1,5 @@
 // src/middlewares/require-access-token.middleware.js
+// 사용자 인증 AccessToken 인증 Middleware
 import jwt from 'jsonwebtoken';
 import { prisma } from '../utils/prisma.util.js';
 
@@ -39,5 +40,3 @@ const accessTokenMiddle  = async (req, res, next) => {
 };
 
 export default accessTokenMiddle;
-
-
