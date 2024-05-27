@@ -40,7 +40,7 @@ router.post('/auth/login', async (req, res, next) => {
         id: user.id,
       },
       'custom-secret-key',
-      {expiresIn:'12h'} //토큰 만료 시간을 12시간으로 설정
+      {expiresIn:'12h'} // 2-5 토큰 만료 시간을 12시간으로 설정
     );
     
     return res.status(200).json({ accessToken: token, message: '로그인 성공' });
@@ -49,34 +49,34 @@ router.post('/auth/login', async (req, res, next) => {
   }
 });
 
-// 유저 상세 페이지 요청 API 
-router.get('/user-detail', async (req, res, next) => {
+// 3. 내 정보 조회 API 
+router.get('/auth/me', async (req, res, next) => {
   try {
-    // 유저 상세 정보를 보는 페이지 요청시-> 요청받은 access token을 헤더에서 보여준다.
+    // 3-1. 내 정보를 보는 페이지 요청시-> 요청받은 access token을 헤더에서 보여준다.
     const authHeader = decodeURIComponent(req.headers["authorization"]);
     if (!authHeader) {
       return res.status(401).json({ message: '헤더 승인이 누락되었습니다.' });
     }
-    //req header에서 Authorization 토큰 값을 가져온다.
+    // 3-2. req header에서 Authorization 토큰 값을 가져온다.
     const token = authHeader.split(' ')[1];
     try {
-      // 토큰을 확인한다.
+      // 3-3. 토큰을 확인한다.
       const decoded = jwt.verify(token, 'custom-secret-key'); // secret key
-      // true면 요청한 페이지를 보여준다
+      // 1)true면 요청한 페이지를 보여준다
       const user = await prisma.users.findUnique({ where: { id: decoded.id } });
-      // false면 메시지를 보여준다.
+      // 2) false면 메시지를 보여준다.
       if (!user) {
         return res.status(404).json({ message: '유저를 찾을 수 없습니다.' });
       }
-
       return res.status(200).json({ user });
+
     } catch (error) {
       console.log(error);
       return res.status(401).json({ message: '잘못된 토큰입니다.' });
     }
+
   } catch (error) {
     next(error);
   }
-  
 });
 export default router;
