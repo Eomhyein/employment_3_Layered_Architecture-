@@ -11,7 +11,8 @@ const accessTokenMiddle  = async (req, res, next) => {
       return res.status(401).json({ message: '인증 정보가 없습니다.' });
     }
 
-    // 3-2. req header에서 Authorization 토큰 값을 가져온다. [수정할 코드] // AccessToken에 Bearer이 없으면 생기는 문제임
+    // 3-2. req header에서 Authorization 토큰 값을 가져온다. 
+    // AccessToken에 Bearer이 없으면 생기는 문제
     const [tokenType, token] = authHeader.split(' ');
     if (tokenType !== 'Bearer' || !token) {
       return res.status(401).json({ message: '지원하지 않는 인증 방식입니다.' });
