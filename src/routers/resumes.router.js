@@ -166,5 +166,4 @@ router.get('/resumes/:id', accessTokenMiddle, async (req, res, next) => {
   }
 });
 
-
 export default router;
