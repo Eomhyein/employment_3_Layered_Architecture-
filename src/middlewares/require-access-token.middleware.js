@@ -2,6 +2,7 @@
 // 사용자 인증 AccessToken 인증 Middleware
 import jwt from 'jsonwebtoken';
 import { prisma } from '../utils/prisma.util.js';
+import { authConstants } from '../constants/auth.constant.js'; // 토큰 연결
 
 const accessTokenMiddle  = async (req, res, next) => {
   try {
@@ -20,7 +21,7 @@ const accessTokenMiddle  = async (req, res, next) => {
 
     // 3-3. 토큰을 확인한다.
     try {
-      const decoded = jwt.verify(token, 'custom-secret-key');
+      const decoded = jwt.verify(token, authConstants.secretKey);
       // 1)true면 요청한 페이지를 보여준다
       const user = await prisma.users.findUnique({ where: { id: decoded.id } });
       // 2) false면 메시지를 보여준다.

@@ -28,4 +28,13 @@
 
 ## **DB**
 - MYSQL DB : employment
-- .env 파일 : DATABASE_URL 저장
+- .env 파일 : PORT, DATABASE_URL, SECRET_KEY 저장
+
+## **배포**
+
+
+
+## **어려운 점**
+- 예시 파일 구성을 보고 구성을 했으나 어디에 어떤 코드를 넣어야 되는지 잘 모름
+- Cookie로 쓰던 것을 AccessToken로 바꾸는 작업에서 어떻게 시작을 해야될지 모름
+- insomnia에서 에러가 발생하면 해결하는데 어려움을 겪음

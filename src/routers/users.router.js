@@ -6,6 +6,8 @@ import { prisma } from '../utils/prisma.util.js'; // connectDb 연결
 import bcrypt from 'bcrypt'; // bcrypt 리팩토링
 import jwt from 'jsonwebtoken'; 
 import accessTokenMiddle from '../middlewares/require-access-token.middleware.js'; // accessToken middlewares
+import { authConstants } from '../constants/auth.constant.js'; // 토큰 연결
+
 const router = express.Router();
 
 // 2. 로그인 API
@@ -39,7 +41,7 @@ router.post('/auth/login', async (req, res, next) => {
       {
         id: user.id,
       },
-      'custom-secret-key',
+      authConstants.secretKey,
       {expiresIn:'12h'} // 2-5 토큰 만료 시간을 12시간으로 설정
     );
     

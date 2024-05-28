@@ -11,7 +11,7 @@ import ResumeRouter from './routers/resumes.router.js';
 dotenv.config(); // .env 파일의 환경 변수를 로드합니다.
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cookieParser()); // 쿠키
