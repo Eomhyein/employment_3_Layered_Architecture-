@@ -10,6 +10,7 @@ import { authConstants } from '../constants/auth.constant.js'; // 토큰 연결
 import AuthController from '../controllers/auth.controller.js';
 
 const router = express.Router();
+const authController = new AuthController();
 // 1. 사용자 회원가입 API
 router.post('/auth/sign-up', async (req, res, next) => {
   try {
@@ -129,6 +130,6 @@ router.post('/auth/login', async (req, res, next) => {
 });
 
 // // 3. 내 정보 조회 API (AccessToken 인증 필요)
-router.get('/auth/me', accessTokenMiddle, AuthController.getMe);
+router.get('/auth/me', accessTokenMiddle, authController.getMe);
 
 export default router;

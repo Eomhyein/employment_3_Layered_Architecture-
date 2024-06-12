@@ -1,9 +1,11 @@
 // src/services/auth.service.js
-import AuthRepository from '../repositories/auth.repository.js';
+import { AuthRepository } from '../repositories/auth.repository.js';
 
-const AuthService = {
-  getMe: async (userId) => {
-    const user = await AuthRepository.findById(userId);
+export class AuthService {
+  authRepository = new AuthRepository();
+  // 3. 내 정보 조회 API
+  getMe = async (userId) => {
+    const user = await this.authRepository.findById(userId);
     if(!user) {
       throw new Error('사용자를 찾지 못했습니다.');
     }
@@ -14,8 +16,6 @@ const AuthService = {
       role: user.role,
       created_at: user.created_at,
       updated_at: user.updated_at
-    };
-  },
+    }
+  }
 };
-
-export default AuthService;
