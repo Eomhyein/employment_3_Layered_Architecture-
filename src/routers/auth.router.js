@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt'; // 1-8 bcrypt 리팩토링
 import jwt from 'jsonwebtoken'; 
 import accessTokenMiddle from '../middlewares/require-access-token.middleware.js'; // accessToken middlewares
 import { authConstants } from '../constants/auth.constant.js'; // 토큰 연결
+import AuthController from '../controllers/auth.controller.js';
 
 const router = express.Router();
 // 1. 사용자 회원가입 API
@@ -111,7 +112,7 @@ router.post('/auth/login', async (req, res, next) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: '인증 정보가 유효하지 않습니다.' });
     }
-    
+    const secretKey = process.env.SECRET_KEY;
     // 2-5 로그인에 성공하면, 사용자의 id를 바탕으로 토큰을 생성합니다.
     const token = jwt.sign(
       {
@@ -128,16 +129,6 @@ router.post('/auth/login', async (req, res, next) => {
 });
 
 // // 3. 내 정보 조회 API (AccessToken 인증 필요)
-router.get('/auth/me', accessTokenMiddle, (req, res) => {
-  const user = req.user;
-  return res.status(200).json({
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    role: user.role,
-    created_at: user.created_at,
-    updated_at: user.updated_at
-  });
-});
+router.get('/auth/me', accessTokenMiddle, AuthController.getMe);
 
 export default router;
