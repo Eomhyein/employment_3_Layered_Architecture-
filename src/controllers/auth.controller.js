@@ -1,16 +1,17 @@
 // src/controllers/auth.controller.js
-import { AuthService } from '../services/auth.service.js';
-
 export default class AuthController {
-  authService = new AuthService();
-  // 3. 내 정보 조회 API
-  getMe = async(req, res, next) => {
+  constructor(authService) {
+    this.authService = authService
+  }
+  // 1. 사용자 회원가입 API
+  signUp = async(req, res, next) => {
     try {
-      const user = await this.authService.getMe(req.user.id)
-      return res.status(200).json(user);
+      // 1-1. 이메일, 비밀번호, 이름을  req.body로 전달받는다.
+      const { email, password, passwordConfirm, name } = req.body;
+      const userJoin = await this.authService.signUp(email, password, passwordConfirm, name)
+      return res.status(200).json(userJoin);
     } catch (error) {
       next(error);
     }
   }
 };
-
