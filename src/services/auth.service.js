@@ -1,5 +1,8 @@
 // src/services/auth.service.js
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'; 
+import { authConstants } from '../constants/auth.constant.js'; // 토큰 연결
+
 export class AuthService {
   constructor(usersRepository) {
     this.usersRepository = usersRepository
@@ -56,8 +59,38 @@ export class AuthService {
     }
   };
 
-  
+  // 2. 로그인 API
+  Login = async (email, password) => {
+    // 2.1 로그인 정보 중 하나라도 빠진 경우 처리
+    if (!email) {
+      throw new Error('이메일을 입력해 주세요.');
+    }
+    if (!password) {
+      throw new Error('비밀번호을 입력해 주세요.');
+    }
+    // 2.2 이메일 형식에 맞지 않는 경우
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new Error('이메일 형식이 올바르지 않습니다.');
+    }
+    // 2.3 이메일로 조회가 불가하거나 비밀번호가 다를 경우
+    const user = await this.usersRepository.findByEmail(email);
 
+    // 2-4 입력받은 사용자의 비밀번호와 데이터베이스에 저장된 비밀번호를 비교합니다.
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      throw new Error('인증 정보가 유효하지 않습니다.');
+    }
+    const secretKey = process.env.SECRET_KEY;
+    // 2-5 로그인에 성공하면, 사용자의 id를 바탕으로 토큰을 생성합니다.
+    const token = jwt.sign(
+      {
+        id: user.id,
+      },
+      authConstants.secretKey,
+      {expiresIn:'12h'} // 2-5 토큰 만료 시간을 12시간으로 설정
+    );
+    return { accessToken: token, message: '로그인 성공' };
+  }
 
   // 3. 내 정보 조회 API
   getMe = async (userId) => {
