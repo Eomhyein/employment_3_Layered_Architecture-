@@ -81,7 +81,21 @@ export default class ResumesController {
       next(error);
     }
   }
-
   // 5. 이력서 삭제
-  // deleteResume
+  deleteResume = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user.id;
+
+      if (!id) {
+        return res.status(400).json({ message: '이력서가 존재하지 않습니다.' });
+      }
+
+      const result = await this.resumesService.deleteResume(userId, id);
+      return res.status(200).json({ data: result });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  }
 }

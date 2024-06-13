@@ -121,4 +121,23 @@ export class ResumeRepository {
     });
   }
   // 5. 이력서 삭제
-};
+  deleteResume = async (userId, id) => {
+    // DB에서 이력서 조회시 이력서 ID, 작성자 ID가 모두 일치해야 한다.
+    const resume = await this.prisma.resume.findFirst({
+      where: {
+        user_id: userId,
+        id: +id
+      },
+    });
+
+    if (!resume) {
+      return res.status(404).json({message:'이력서를 찾을 수 없습니다.'});
+    }
+    // DB에서 이력서 정보를 삭제합니다.
+    const deleteResume = await this.prisma.resume.delete({
+      where: { id: +id },
+    });
+
+    return deleteResume;
+  }
+}

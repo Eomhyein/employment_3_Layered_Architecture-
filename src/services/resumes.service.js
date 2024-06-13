@@ -85,8 +85,11 @@ export default class ResumesService {
     };
   };
   // 5. 이력서 삭제
-
-
-
-  
+  deleteResume = async (userId, resumeId) => {
+    const deletedResume = await this.resumeRepository.deleteResume(userId, resumeId);
+    // 삭제 된 이력서 ID 반환
+    return {
+      id: deletedResume.id,
+    };
+  }
 }
