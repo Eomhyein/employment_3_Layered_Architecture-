@@ -15,116 +15,10 @@ const resumesController = new ResumesController(resumeService);
 router.post('/resumes', accessTokenMiddle, resumesController.createdResume);
   
 // 2. 이력서 목록 조회 API 내가 등록한 이력서 목록 조회
-router.get('/resumes', accessTokenMiddle, async (req, res, next) => {
-  try {
-    const userId = req.user.id;
-    console.log(userId);// 사용자확인
-    // 2-1 Query Parameters 정렬 조건 받기 기본값 'DESC'
-    const { sort = 'DESC' } = req.query;
-    // 2-2 생성일시 기준 정렬 과거순(ASC), 최신순(DESC)으로 전달 받는다 sort
-      // 값이 없는 경우 최신순(DESC), 대소문자 구분 없이 동작
-    const SortOrder = sort.toUpperCase() === 'ASC' ? 'asc' : 'desc';
-
-    // 2-3 현재 로그인 한 사용자가 작성한 이력서 목록만 조회
-      // DB에서 이력서 조회시 작성자 ID 일치하는지 확인
-      // 정렬 조건에 따라 다른 결과 값 조회
-      // 작성자 ID가 아닌 작성자 이름을 반환하기 위해 스키마에 정의 한 Relation을 활용해 조회
-    const resumes = await prisma.resume.findMany({
-      where: {user_id: userId},
-      select: {
-        id: true,
-        user_id: true,
-        title:  true,
-        about_me: true,
-        status: true,
-        created_at: true,
-        updated_at: true,
-        user: {
-          select: {
-            name: true
-          }
-        }
-      },
-      orderBy: {
-        created_at: SortOrder,
-      }
-    });
-
-    // 2-4 일치하는 값이 없는 경우 빈 배열을 반환(StatusCode: 200)
-    if(!resumes) {
-      return res.status(200).json([]);
-    }
-    // 2-5 이력서id, 작성자 이름, 제목, 자기소개, 지원상태, 생성일시, 수정일시 반환
-    const result = resumes.map(resume => ({
-      id : resume.id,
-      name: resume.user.name,
-      title: resume.title,
-      about_me: resume.about_me,
-      status: resume.status,
-      created_at: resume.created_at,
-      updated_at: resume.updated_at
-    }));
-    return res.status(200).json({data: result});
-
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
+router.get('/resumes', accessTokenMiddle, resumesController.getAllResume);
+  
 // 3. 이력서 상세 조회 API
-router.get('/resumes/:id', accessTokenMiddle, async (req, res, next) => {
-  try {
-    const userId = req.user.id;
-    const {id} = req.params;
-    // 3-1 이력서 정보가 없는 경우 : 이력서가 존재하지 않습니다.
-    if(!id) {
-      return res.status(400).json({message:'이력서가 존재하지 않습니다.'});
-    }
-    // 3-2
-    // 현재 로그인 한 사용자가 작성한 이력서만 조회
-    // DB에서 이력서 조회시 이력서 ID, 작성자ID 일치해야됨
-    // 작성자 ID가 아닌 작성자 이름을 반환하기 위해 스키마에 정의한 릴레이션 활용해서 조회
-    const resume = await prisma.resume.findUnique({
-      where: {
-        user_id: userId,
-        id: +id
-      },
-      select: {
-        id: true,
-        user_id: true,
-        title: true,
-        about_me: true,
-        status: true,
-        created_at: true,
-        updated_at: true,
-        user:{
-          select: {
-            name: true
-          }
-        }
-      }
-    });
-    // 3-3 이력서가 없는 경우
-    if(!resume) {
-      return res.status(404).json({message:'이력서가 존재하지 않습니다.'});
-    }
-    // 3-4 이력서id, 작성자 이름, 제목, 자기소개, 지원상태, 생성일시, 수정일시 반환
-    const result = {
-      id : resume.id,
-      name: resume.user.name,
-      title: resume.title,
-      about_me: resume.about_me,
-      status: resume.status,
-      created_at: resume.created_at,
-      updated_at: resume.updated_at
-    };
-    return res.status(200).json({data: result});
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
+router.get('/resumes/:id', accessTokenMiddle, resumesController.getDetailResume);
 
 // 4. 이력서 수정 API
 router.patch('/resumes/:id', accessTokenMiddle, async(req, res, next) => {
@@ -257,5 +151,6 @@ router.delete('/resumes/:id', accessTokenMiddle, async (req, res, next) => {
 //     next(error);
 //   }
 // });
+
 
 export default router;

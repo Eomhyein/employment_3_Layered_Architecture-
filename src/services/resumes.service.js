@@ -30,6 +30,44 @@ export default class ResumesService {
     return newResume;
   };
 
+  // 2. 이력서 목록 조회 API 내가 등록한 이력서 목록 조회
+  getAllResume = async (userId, sortOrder) => {
+    const resumes = await this.resumeRepository.findAllByUserId(userId, sortOrder);
+  
+    // 2-4 일치하는 값이 없는 경우 빈 배열을 반환(StatusCode: 200)
+    if (!resumes || resumes.length === 0) {
+      return [];
+    }
+    // 2-5 이력서id, 작성자 이름, 제목, 자기소개, 지원상태, 생성일시, 수정일시 반환
+    return resumes.map(resume => ({
+      id: resume.id,
+      name: resume.user.name,
+      title: resume.title,
+      about_me: resume.about_me,
+      status: resume.status,
+      created_at: resume.created_at,
+      updated_at: resume.updated_at
+    }));
+  };
+
+  // 3. 이력서 상세 조회 API
+  getDetailResume = async (userId, resumeId) => {
+    const resume = await this.resumeRepository.findDetailUserId(userId, resumeId);
+    let result 
+    if(resume) {
+      // 3-4 이력서id, 작성자 이름, 제목, 자기소개, 지원상태, 생성일시, 수정일시 반환
+    result = {
+      id : resume.id,
+      name: resume.user.name,
+      title: resume.title,
+      about_me: resume.about_me,
+      status: resume.status,
+      created_at: resume.created_at,
+      updated_at: resume.updated_at
+    };
+    }
+    return result;
+  }
 }
 
 

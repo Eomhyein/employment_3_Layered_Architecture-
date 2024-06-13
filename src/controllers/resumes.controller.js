@@ -32,9 +32,39 @@ export default class ResumesController {
       return res.status(500).json({ message: '서버 오류가 발생했습니다.' });
     }
   };
-  // 2. 이력서 조회
+  // 2. 이력서 목록 조회 API 내가 등록한 이력서 목록 조회
+  getAllResume = async(req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const { sort = 'DESC' } = req.query; // 2-1 Query Parameters 정렬 조건 받기 기본값 'DESC'
+      const resumes = await this.resumesService.getAllResume(userId, sort);
+      return res.status(200).json({ data: resumes });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  };
   // 3. 이력서 상세조회
+  getDetailResume = async(req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const {id} = req.params;
+      console.log(id);
+      const resume = await this.resumesService.getDetailResume(userId, id);
+      // 3-3 이력서가 없는 경우
+      if(!resume) {
+        return res.status(200).json({message:'이력서가 존재하지 않습니다.'});
+      }
+      return res.status(200).json({ data: resume });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  }
+  
   // 4. 이력서 수정
+  // updateResume
   // 5. 이력서 삭제 
+  // deleteResume
 
 }
