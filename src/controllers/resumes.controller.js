@@ -29,7 +29,7 @@ export default class ResumesController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+      next(error);
     }
   };
   // 2. 이력서 목록 조회 API 내가 등록한 이력서 목록 조회
