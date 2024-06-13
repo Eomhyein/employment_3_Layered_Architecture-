@@ -68,6 +68,25 @@ export default class ResumesService {
     }
     return result;
   }
+
+
+  // 4. 이력서 수정 API
+  updateResume = async (userId, resumeId, title, about_me) => {
+    const updatedResume = await this.resumeRepository.loginUserResume(userId, resumeId, title, about_me);
+    return {
+      id: updatedResume.id,
+      user_id: updatedResume.user_id,
+      name: updatedResume.user.name,
+      title: updatedResume.title,
+      about_me: updatedResume.about_me,
+      status: updatedResume.status,
+      created_at: updatedResume.created_at,
+      updated_at: updatedResume.updated_at
+    };
+  };
+  // 5. 이력서 삭제
+
+
+
+  
 }
-
-

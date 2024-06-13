@@ -71,4 +71,54 @@ export class ResumeRepository {
       }
     });
   };
+  // 4. 이력서 수정
+  loginUserResume = async (userId, id, title, about_me) => {
+    // 4-3 현재 로그인 한 사용자가 작성한 이력서만 수정한다
+    // DB에서 이력서 조회 시 이력서 ID, 작성자 ID가 모두 일치해야 한다
+    const resume = await this.prisma.resume.findFirst({
+      where: {
+        user_id: userId,
+        id: +id
+      },
+      select: {
+        id: true,
+        user_id: true,
+        title: true,
+        about_me: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+        user: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
+    
+    // 4-5 DB에서 이력서 정보를 수정한다
+    // 제목, 자기소개는 개별 수정이 가능하다
+    return await this.prisma.resume.update({
+      where: {id: +id},
+      data: {
+        ...(title && {title}),
+        ...(about_me && {about_me}),
+      },
+      select: {
+        id: true,
+        user_id: true,
+        title: true,
+        about_me: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+        user: {
+          select :{
+            name: true
+          }
+        }
+      }
+    });
+  }
+  // 5. 이력서 삭제
 };

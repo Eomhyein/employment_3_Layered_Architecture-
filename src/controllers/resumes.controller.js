@@ -63,8 +63,25 @@ export default class ResumesController {
   }
   
   // 4. 이력서 수정
-  // updateResume
-  // 5. 이력서 삭제 
-  // deleteResume
+  updateResume = async(req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const {id} = req.params;
+      const{title, about_me} = req.body;
 
+      // 4-1 제목, 자기소개 둘 다 없는 경우
+      if(!title && !about_me) {
+        return res.status(404).json({message:'수정 할 정보를 입력해 주세요.'});
+      }
+    
+      const updatedResume = await this.resumesService.updateResume(userId, id, title, about_me);
+      return res.status(200).json({data: updatedResume});
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  }
+
+  // 5. 이력서 삭제
+  // deleteResume
 }
