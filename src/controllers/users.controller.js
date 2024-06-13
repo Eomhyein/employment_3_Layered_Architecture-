@@ -10,6 +10,7 @@ export default class UsersController {
       const user = await this.authService.getMe(req.user.id)
       return res.status(200).json(user);
     } catch (error) {
+      console.error(error);
       next(error);
     }
   }

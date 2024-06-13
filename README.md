@@ -30,4 +30,5 @@
 ## **배포**
 
 ## **어려운 점**
-- 
+- 3-Layered Architecture로 분리하는데 Controller, Service, Repository에 대해 완벽히 이해하지 못한 상태에서 하느라 힘들었다.
+- HTTP Error class 활용하는데 잘 몰라서 물어보고 해보았으나 정확하게 사용하지 못해 아쉽다.
