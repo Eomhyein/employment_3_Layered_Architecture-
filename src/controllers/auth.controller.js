@@ -14,4 +14,15 @@ export default class AuthController {
       next(error);
     }
   }
+
+  // 2. 로그인 API
+  Login = async(req, res, next) => {
+    try {
+      const { email, password } = req.body;
+      const userLogin = await this.authService.Login(email, password);
+        return res.status(200).json(userLogin);
+      } catch (error) {
+      next(error); // 에러가 발생하면 에러 핸들러로 전달합니다.
+    }
+  }
 };
