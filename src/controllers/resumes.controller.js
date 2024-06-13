@@ -53,7 +53,7 @@ export default class ResumesController {
       const resume = await this.resumesService.getDetailResume(userId, id);
       // 3-3 이력서가 없는 경우
       if(!resume) {
-        return res.status(200).json({message:'이력서가 존재하지 않습니다.'});
+        return res.status(400).json({message:'이력서가 존재하지 않습니다.'});
       }
       return res.status(200).json({ data: resume });
     } catch (error) {
